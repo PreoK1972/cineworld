@@ -118,13 +118,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     adsEnabled: true,
   });
 
-  // Admin and transaction states
-  const [transactions, setTransactions] = useState<TransactionRecord[]>(INITIAL_TRANSACTIONS);
+  // Admin and transaction states - starts clean, populated by real user payments
+  const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
   const [adSettings, setAdSettings] = useState<AdSettings>({
     adsEnabled: true,
     preRollCountdownSeconds: 5,
-    propellerAdsZoneId: '7829144',
-    adsteraKey: 'ad_9201948102',
+    propellerAdsZoneId: '',
+    adsteraKey: '',
     bannerAdsEnabled: true,
     popUnderEnabled: false,
   });
@@ -185,6 +185,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const savedMovies = localStorage.getItem('cineworld_custom_movies');
       if (savedMovies) {
         setMovies(JSON.parse(savedMovies));
+      }
+      const savedTxs = localStorage.getItem('cineworld_transactions');
+      if (savedTxs) {
+        setTransactions(JSON.parse(savedTxs));
       }
     } catch (e) {
       console.error('Failed to parse localStorage', e);
@@ -284,7 +288,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       status: 'Completed',
       timestamp: 'Just now',
     };
-    setTransactions((prev) => [newTx, ...prev]);
+    setTransactions((prev) => {
+      const updated = [newTx, ...prev];
+      try {
+        localStorage.setItem('cineworld_transactions', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
 
     try {
       localStorage.setItem('cineworld_subscription', JSON.stringify(newSub));

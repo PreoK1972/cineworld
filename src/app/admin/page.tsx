@@ -344,7 +344,7 @@ export default function AdminPage() {
             }`}
           >
             <Smartphone className="w-4 h-4" />
-            <span>Paychangu Subscriptions ({transactions.length})</span>
+            <span>VIP Subscriptions ({transactions.length})</span>
           </button>
 
           <button
@@ -370,56 +370,56 @@ export default function AdminPage() {
               {/* Total Monthly Earnings */}
               <div className="p-5 bg-gradient-to-br from-emerald-600/20 via-neutral-900 to-neutral-950 border border-emerald-500/30 rounded-2xl space-y-1">
                 <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold">
-                  <span>Total Estimated Monthly</span>
+                  <span>Total VIP Revenue</span>
                   <DollarSign className="w-4 h-4" />
-                </div>
-                <div className="text-2xl sm:text-3xl font-black text-white">
-                  ${totalMonthlyEarningsUsd.toLocaleString()}
-                </div>
-                <p className="text-[11px] text-emerald-400 font-medium">
-                  ≈ MKW {(totalMonthlyEarningsUsd * 1800).toLocaleString()}
-                </p>
-              </div>
-
-              {/* Subscriptions Revenue */}
-              <div className="p-5 bg-gradient-to-br from-amber-600/20 via-neutral-900 to-neutral-950 border border-amber-500/30 rounded-2xl space-y-1">
-                <div className="flex items-center justify-between text-xs text-amber-400 font-semibold">
-                  <span>Paychangu Subscriptions</span>
-                  <Smartphone className="w-4 h-4" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-white">
                   MKW {totalSubscribersRevenueMkw.toLocaleString()}
                 </div>
-                <p className="text-[11px] text-neutral-400">
-                  From MKW 2,000 / 7-Day passes
+                <p className="text-[11px] text-emerald-400 font-medium">
+                  ≈ ${totalSubscribersRevenueUsd} USD earned
                 </p>
               </div>
 
-              {/* Ad Impressions */}
-              <div className="p-5 bg-gradient-to-br from-blue-600/20 via-neutral-900 to-neutral-950 border border-blue-500/30 rounded-2xl space-y-1">
-                <div className="flex items-center justify-between text-xs text-blue-400 font-semibold">
-                  <span>Ad Impressions (CPM)</span>
-                  <BarChart3 className="w-4 h-4" />
+              {/* Active Subscribers */}
+              <div className="p-5 bg-gradient-to-br from-amber-600/20 via-neutral-900 to-neutral-950 border border-amber-500/30 rounded-2xl space-y-1">
+                <div className="flex items-center justify-between text-xs text-amber-400 font-semibold">
+                  <span>Active VIP Passes</span>
+                  <Smartphone className="w-4 h-4" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-white">
-                  142,500
+                  {transactions.length}
                 </div>
-                <p className="text-[11px] text-blue-300">
-                  Avg CPM: $4.20 / 1k views
+                <p className="text-[11px] text-neutral-400">
+                  MKW 2,000 / 7-Day subscribers
                 </p>
               </div>
 
-              {/* Active Stream Sessions */}
+              {/* Ad Payout Network */}
+              <div className="p-5 bg-gradient-to-br from-blue-600/20 via-neutral-900 to-neutral-950 border border-blue-500/30 rounded-2xl space-y-1">
+                <div className="flex items-center justify-between text-xs text-blue-400 font-semibold">
+                  <span>Ad Revenue Channel</span>
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div className="text-xl sm:text-2xl font-black text-white">
+                  USDT TRC-20
+                </div>
+                <p className="text-[11px] text-blue-300">
+                  Target CPM: $10.00 / 1k views
+                </p>
+              </div>
+
+              {/* Total Catalog Items */}
               <div className="p-5 bg-gradient-to-br from-rose-600/20 via-neutral-900 to-neutral-950 border border-rose-500/30 rounded-2xl space-y-1">
                 <div className="flex items-center justify-between text-xs text-rose-400 font-semibold">
-                  <span>Active Stream Sessions</span>
+                  <span>Catalog Size</span>
                   <Play className="w-4 h-4" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-white">
-                  1,840
+                  {movies.length} Titles
                 </div>
                 <p className="text-[11px] text-rose-300">
-                  Concurrent viewers today
+                  Live streaming & downloads
                 </p>
               </div>
 
@@ -428,7 +428,7 @@ export default function AdminPage() {
             {/* Payout & Settlement Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* Payoneer USD Payout Setup */}
+              {/* TronLink USDT TRC-20 Wallet */}
               <div className="p-6 bg-neutral-900/60 rounded-3xl border border-white/5 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
@@ -436,35 +436,35 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white">
-                      Payoneer Global USD Account (Ad Networks)
+                      TronLink USDT TRC-20 (Ad Networks Payout)
                     </h3>
                     <p className="text-xs text-neutral-400">
-                      Receives USD wire payouts from PropellerAds / AdSterra
+                      Receives USD ad earnings from HilltopAds & AdSterra
                     </p>
                   </div>
                 </div>
 
                 <div className="p-4 bg-neutral-950 rounded-2xl border border-white/5 space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Bank Name:</span>
-                    <span className="text-white font-mono">First Century Bank (US)</span>
+                    <span className="text-neutral-400">Network:</span>
+                    <span className="text-white font-mono">Tron (TRC-20)</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Routing Number (ABA):</span>
-                    <span className="text-white font-mono">061120084</span>
+                    <span className="text-neutral-400">Wallet Address:</span>
+                    <span className="text-amber-400 font-mono text-[10px] break-all">THDb19sodpKVy4Q7csqSkNpyuLNayAJs5x</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Account Type:</span>
-                    <span className="text-white">Checking (USD)</span>
+                    <span className="text-neutral-400">Settlement Currency:</span>
+                    <span className="text-white">USDT (Crypto Dollar)</span>
                   </div>
                   <div className="flex justify-between pt-1 border-t border-white/5">
-                    <span className="text-neutral-400">Withdrawal Destination:</span>
-                    <span className="text-emerald-400 font-semibold">Malawi Bank / Airtel Money</span>
+                    <span className="text-neutral-400">Cashout Method:</span>
+                    <span className="text-emerald-400 font-semibold">P2P to Airtel Money / Mpamba</span>
                   </div>
                 </div>
               </div>
 
-              {/* Paychangu Local Settlement */}
+              {/* Local Mobile & Bank Collection */}
               <div className="p-6 bg-neutral-900/60 rounded-3xl border border-white/5 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
@@ -472,32 +472,32 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white">
-                      Paychangu Malawi Settlement (MKW Subscriptions)
+                      Direct Mobile & Bank Accounts (MKW Subscriptions)
                     </h3>
                     <p className="text-xs text-neutral-400">
-                      Automatic daily/weekly settlement for MKW 2,000 passes
+                      Direct MKW 2,000 payments from subscribers
                     </p>
                   </div>
                 </div>
 
                 <div className="p-4 bg-neutral-950 rounded-2xl border border-white/5 space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Settlement Currency:</span>
-                    <span className="text-white font-bold">MWK (Malawian Kwacha)</span>
+                    <span className="text-neutral-400">Airtel Money:</span>
+                    <span className="text-white font-mono">0999898896 (Tamara Gausi)</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Payout Channels:</span>
-                    <span className="text-white">Airtel Money, Mpamba, NBS, FDH</span>
+                    <span className="text-neutral-400">TNM Mpamba:</span>
+                    <span className="text-white font-mono">0892727574 (Prince Kasalika)</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Processing Fee:</span>
-                    <span className="text-neutral-300">~2.5% per transaction</span>
+                    <span className="text-neutral-400">Malawi Bank:</span>
+                    <span className="text-white font-mono">1008434146 (Prince Kasalika)</span>
                   </div>
                   <div className="flex justify-between pt-1 border-t border-white/5">
-                    <span className="text-neutral-400">Webhook Status:</span>
+                    <span className="text-neutral-400">Verification Mode:</span>
                     <span className="text-emerald-400 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      Listening on /api/paychangu/webhook
+                      Manual SMS Verification Active
                     </span>
                   </div>
                 </div>
@@ -828,9 +828,9 @@ export default function AdminPage() {
             <div className="bg-neutral-900/60 rounded-3xl border border-white/10 overflow-hidden">
               <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between">
                 <h3 className="text-sm font-bold text-white">
-                  Recent Paychangu MKW 2,000 Transactions ({transactions.length})
+                  Approved VIP Passes & Transactions ({transactions.length})
                 </h3>
-                <span className="text-xs text-emerald-400 font-mono">Status: Webhook 200 OK</span>
+                <span className="text-xs text-emerald-400 font-mono">Live VIP Sync ✅</span>
               </div>
 
               <div className="overflow-x-auto">
