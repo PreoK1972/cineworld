@@ -378,9 +378,11 @@ export default function StreamPlayerModal() {
   };
 
   const handleDownloadEpisode = (ep: LiveEpisode) => {
+    if (!streamingMovie) return;
     showToast(`⬇ Starting download: ${streamingMovie.title} S${ep.seasonNumber}:E${ep.episodeNumber}`);
     openDownloadModal({
       ...streamingMovie,
+      id: streamingMovie.id ?? '',
       title: `${streamingMovie.title} (S${ep.seasonNumber}:E${ep.episodeNumber})`
     });
   };
