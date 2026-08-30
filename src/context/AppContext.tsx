@@ -27,6 +27,8 @@ interface AppContextType {
   movies: MovieItem[];
   searchResults: MovieItem[];
   isSearching: boolean;
+  categoryMovies: MovieItem[];
+  isCategoryLoading: boolean;
   addMovie: (movie: MovieItem) => void;
   deleteMovie: (movieId: string) => void;
   toggleFeaturedMovie: (movieId: string) => void;
@@ -37,7 +39,7 @@ interface AppContextType {
 
   // Subscription state
   subscription: UserSubscription;
-  upgradeToVip: (durationDays?: number, phoneOrEmail?: string, channel?: any) => void;
+  upgradeToVip: (durationDays?: number, phoneOrEmail?: string, channel?: any, amountMkw?: number) => void;
   downgradeToFree: () => void;
 
   // Transactions & Admin stats
@@ -107,6 +109,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [movies, setMovies] = useState<MovieItem[]>(FEATURED_MOVIES);
   const [searchResults, setSearchResults] = useState<MovieItem[]>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [categoryMovies, setCategoryMovies] = useState<MovieItem[]>([]);
+  const [isCategoryLoading, setIsCategoryLoading] = useState<boolean>(false);
   const [watchlist, setWatchlist] = useState<string[]>([]);
   
   // Subscription state
@@ -143,7 +147,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Live Live Search with TMDB API
+  // Live Search with Multi-APIs (TMDB + TVMaze + Jikan + Kitsu)
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
@@ -164,10 +168,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       } finally {
         setIsSearching(false);
       }
-    }, 350);
+    }, 300);
 
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
+
+  // Live Category Discovery with Multi-APIs (MovieBox Style)
+  useEffect(() => {
+    if (activeCategory === 'All' || activeCategory === 'Watchlist' || searchQuery.trim()) {
+      setCategoryMovies([]);
+      setIsCategoryLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+    setIsCategoryLoading(true);
+
+    fetch(`/api/movies?category=${encodeURIComponent(activeCategory)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted) {
+          setCategoryMovies(data.results || []);
+        }
+      })
+      .catch((err) => console.error('Category fetch error', err))
+      .finally(() => {
+        if (isMounted) setIsCategoryLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeCategory, searchQuery]);
+
   // Load from local storage
   useEffect(() => {
     try {
@@ -264,13 +297,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const upgradeToVip = (
     durationDays: number = 7, 
     phoneOrEmail: string = '0999 12 34 56',
-    channel: any = 'Airtel Money'
+    channel: any = 'Airtel Money',
+    amountMkw: number = 2000
   ) => {
     const until = new Date();
     until.setDate(until.getDate() + durationDays);
 
     const newSub: UserSubscription = {
-      plan: 'vip_mkw2000',
+      plan: durationDays === 1 ? 'vip_daily' : durationDays === 30 ? 'vip_monthly' : 'vip_weekly',
       activeUntil: until.toISOString(),
       isVip: true,
       downloadLimitPerDay: 9999,
@@ -283,7 +317,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       id: `tx-${Math.floor(1000 + Math.random() * 9000)}`,
       userPhoneOrEmail: phoneOrEmail,
       channel: channel || 'Airtel Money',
-      amountMkw: 2000,
+      amountMkw: amountMkw,
       durationDays: durationDays,
       status: 'Completed',
       timestamp: 'Just now',
@@ -353,6 +387,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         movies,
         searchResults,
         isSearching,
+        categoryMovies,
+        isCategoryLoading,
         addMovie,
         deleteMovie,
         toggleFeaturedMovie,

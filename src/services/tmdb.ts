@@ -5,72 +5,200 @@ const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || '4f298a53e5522830c8
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
-// Universal embed generators for any movie or TV series across 5 streaming mirrors
+// Universal embed generators for any movie or TV series across 7 high-speed streaming mirrors
 export function getEmbedServers(
   id: string | number, 
   type: 'movie' | 'series' | 'animation', 
   season: number = 1, 
   episode: number = 1
 ) {
-  const idStr = String(id).replace(/[^0-9]/g, '') || '1399'; // fallback id if alphanumeric
+  const idStr = String(id).replace(/[^0-9]/g, '');
+  if (!idStr) {
+    return [];
+  }
+
   const isTV = type === 'series' || type === 'animation';
 
   if (isTV) {
     return [
       {
-        name: 'Server 1 - VidSrc Multi-CDN (Ultra Fast)',
-        serverLocation: 'Global Edge',
+        name: 'Stream Line 1 (Ultra)',
+        serverLocation: 'Americas / Global CDN',
+        quality: '4K / 1080p 60fps',
+        embedUrl: `https://player.smashy.stream/tv/${idStr}?s=${season}&e=${episode}`,
+      },
+      {
+        name: 'Stream Line 2 (Fast)',
+        serverLocation: 'Worldwide Edge',
         quality: '4K / 1080p',
-        embedUrl: `https://vidsrc.me/embed/tv?tmdb=${idStr}&season=${season}&episode=${episode}`,
+        embedUrl: `https://multiembed.mov/?video_id=${idStr}&tmdb=1&s=${season}&e=${episode}`,
       },
       {
-        name: 'Server 2 - SuperEmbed Global',
-        serverLocation: 'Europe',
-        quality: '1080p HD',
-        embedUrl: `https://superembed.stream/embed/tv/${idStr}/${season}/${episode}`,
-      },
-      {
-        name: 'Server 3 - 2Embed Multi-Language',
+        name: 'Stream Line 3 (HD)',
         serverLocation: 'North America',
-        quality: '1080p / 720p',
-        embedUrl: `https://2embed.cc/embedtv/${idStr}&s=${season}&e=${episode}`,
+        quality: '1080p HD',
+        embedUrl: `https://www.2embed.cc/embedtv/${idStr}&s=${season}&e=${episode}`,
       },
       {
-        name: 'Server 4 - AutoEmbed HD',
-        serverLocation: 'Asia / Africa Route',
-        quality: '720p Low-Data Adaptive',
-        embedUrl: `https://autoembed.to/tv/tmdb/${idStr}-${season}-${episode}`,
+        name: 'Stream Line 4 (Global)',
+        serverLocation: 'Global Edge',
+        quality: '1080p HD',
+        embedUrl: `https://autoembed.co/tv/tmdb/${idStr}-${season}-${episode}`,
+      },
+      {
+        name: 'Stream Line 5 (Cloud)',
+        serverLocation: 'Europe / Americas CDN',
+        quality: '1080p HD',
+        embedUrl: `https://player.autoembed.cc/embed/tv/${idStr}/${season}/${episode}`,
+      },
+      {
+        name: 'Stream Line 6 (Backup 1)',
+        serverLocation: 'Global Edge',
+        quality: '1080p HD',
+        embedUrl: `https://vidsrc.pm/embed/tv/${idStr}/${season}/${episode}`,
+      },
+      {
+        name: 'Stream Line 7 (Backup 2)',
+        serverLocation: 'Global Cloud',
+        quality: '1080p HD',
+        embedUrl: `https://vidsrc.net/embed/tv/${idStr}/${season}/${episode}`,
       },
     ];
   }
 
   return [
     {
-      name: 'Server 1 - VidSrc Multi-CDN (Ultra Fast)',
-      serverLocation: 'Global Edge',
+      name: 'Stream Line 1 (Ultra)',
+      serverLocation: 'Americas / Global CDN',
+      quality: '4K / 1080p 60fps',
+      embedUrl: `https://player.smashy.stream/movie/${idStr}`,
+    },
+    {
+      name: 'Stream Line 2 (Fast)',
+      serverLocation: 'Worldwide Edge',
       quality: '4K / 1080p',
-      embedUrl: `https://vidsrc.me/embed/movie?tmdb=${idStr}`,
+      embedUrl: `https://multiembed.mov/?video_id=${idStr}&tmdb=1`,
     },
     {
-      name: 'Server 2 - SuperEmbed Global',
-      serverLocation: 'Europe',
-      quality: '1080p HD',
-      embedUrl: `https://superembed.stream/embed/movie/${idStr}`,
-    },
-    {
-      name: 'Server 3 - 2Embed Multi-Language',
+      name: 'Stream Line 3 (HD)',
       serverLocation: 'North America',
-      quality: '1080p / 720p',
-      embedUrl: `https://2embed.cc/embed/${idStr}`,
+      quality: '1080p HD',
+      embedUrl: `https://www.2embed.cc/embed/${idStr}`,
     },
     {
-      name: 'Server 4 - AutoEmbed HD',
-      serverLocation: 'Asia / Africa Route',
-      quality: '720p Low-Data Adaptive',
-      embedUrl: `https://autoembed.to/movie/tmdb/${idStr}`,
+      name: 'Stream Line 4 (Global)',
+      serverLocation: 'Global Edge',
+      quality: '1080p HD',
+      embedUrl: `https://autoembed.co/movie/tmdb/${idStr}`,
+    },
+    {
+      name: 'Stream Line 5 (Cloud)',
+      serverLocation: 'Europe / Americas CDN',
+      quality: '1080p HD',
+      embedUrl: `https://player.autoembed.cc/embed/movie/${idStr}`,
+    },
+    {
+      name: 'Stream Line 6 (Backup 1)',
+      serverLocation: 'Global Edge',
+      quality: '1080p HD',
+      embedUrl: `https://vidsrc.pm/embed/movie/${idStr}`,
+    },
+    {
+      name: 'Stream Line 7 (Backup 2)',
+      serverLocation: 'Global Cloud',
+      quality: '1080p HD',
+      embedUrl: `https://vidsrc.net/embed/movie/${idStr}`,
     },
   ];
 }
+
+// Option A: Real-time TMDB ID resolution by title for 100% streaming success on any movie/series
+export async function fetchTMDBIdByTitle(title: string, type: 'movie' | 'series' | 'animation' = 'movie'): Promise<string | null> {
+  if (!title) return null;
+  try {
+    const res = await fetch(`/api/tmdb-resolve?title=${encodeURIComponent(title)}&type=${type}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.tmdbId) {
+        return String(data.tmdbId);
+      }
+    }
+  } catch (e) {
+    console.error('fetchTMDBIdByTitle route error', e);
+  }
+
+  // Direct fallback
+  try {
+    const cleanTitle = title.replace(/\(.*?\)/g, '').trim();
+    const endpoint = type === 'series' || type === 'animation' ? 'tv' : 'movie';
+    const res = await fetch(
+      `${TMDB_BASE_URL}/search/${endpoint}?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(cleanTitle)}&page=1`
+    );
+    if (res.ok) {
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        return String(data.results[0].id);
+      }
+    }
+    const multiRes = await fetch(
+      `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(cleanTitle)}&page=1`
+    );
+    if (multiRes.ok) {
+      const multiData = await multiRes.json();
+      const match = (multiData.results || []).find((item: any) => item.media_type === 'movie' || item.media_type === 'tv');
+      if (match) return String(match.id);
+    }
+  } catch (e) {
+    console.error('fetchTMDBIdByTitle direct error', e);
+  }
+  return null;
+}
+
+// Fetch full season list for a TV series from server-side API route
+export async function fetchTMDBSeriesDetails(tmdbId: string): Promise<{
+  id: string;
+  name: string;
+  seasons: Array<{ seasonNumber: number; name: string; episodeCount: number; posterUrl: string }>;
+} | null> {
+  try {
+    const res = await fetch(`/api/series-episodes?tmdbId=${tmdbId}&season=1`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.success && data.seasons) {
+      return { id: String(data.tmdbId), name: data.showName, seasons: data.seasons };
+    }
+  } catch (e) {
+    console.error('fetchTMDBSeriesDetails error', e);
+  }
+  return null;
+}
+
+// Fetch all episodes for a single season from server-side API route
+export async function fetchTMDBSeasonEpisodes(tmdbId: string, seasonNumber: number): Promise<Array<{
+  episodeNumber: number;
+  seasonNumber: number;
+  title: string;
+  overview: string;
+  duration: string;
+  thumbnail: string;
+  airDate: string;
+}>> {
+  try {
+    const res = await fetch(`/api/series-episodes?tmdbId=${tmdbId}&season=${seasonNumber}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (data.success && data.episodes) {
+      return data.episodes;
+    }
+  } catch (e) {
+    console.error('fetchTMDBSeasonEpisodes error', e);
+  }
+  return [];
+}
+
+
+
+
 
 export function getDownloadOptions(title: string, year: number): DownloadOption[] {
   const cleanTitle = encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'));
@@ -164,6 +292,7 @@ export function formatTMDBItem(raw: any, explicitType?: 'movie' | 'series' | 'an
 
   return {
     id: `tmdb-${type}-${raw.id}`,
+    tmdbId: String(raw.id),
     title,
     type,
     overview: raw.overview || 'Stream and download in high definition on CineWorld.',
@@ -228,7 +357,7 @@ export async function searchTVMaze(query: string): Promise<MovieItem[]> {
 // 2. Jikan Anime API (100% Free MyAnimeList database for all anime series & movies)
 export async function searchJikanAnime(query: string): Promise<MovieItem[]> {
   try {
-    const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=10`);
+    const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=12`);
     if (!res.ok) return [];
     const data = await res.json();
     return (data.data || []).map((anime: any) => {
@@ -263,16 +392,73 @@ export async function searchJikanAnime(query: string): Promise<MovieItem[]> {
   }
 }
 
-// Unified Multi-API Global Search (TMDB + TVMaze + Jikan)
-export async function searchGlobalAPIs(query: string): Promise<MovieItem[]> {
-  if (!query.trim()) return [];
+// 3. Kitsu Anime API (Free Open Database)
+export async function searchKitsuAnime(query: string): Promise<MovieItem[]> {
+  try {
+    const res = await fetch(`https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=10`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.data || []).map((item: any) => {
+      const attr = item.attributes;
+      const title = attr.canonicalTitle || attr.titles?.en || attr.titles?.en_jp || 'Anime';
+      const releaseYear = attr.startDate ? new Date(attr.startDate).getFullYear() : 2023;
+      const poster = attr.posterImage?.large || attr.posterImage?.original || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop';
+      const backdrop = attr.coverImage?.large || attr.coverImage?.original || poster;
+      const rating = attr.averageRating ? Number((Number(attr.averageRating) / 10).toFixed(1)) : 8.2;
 
-  // Run in parallel
-  const [tmdbResults, tvmazeResults, jikanResults] = await Promise.allSettled([
+      return {
+        id: `kitsu-${item.id}`,
+        title,
+        type: 'animation' as const,
+        overview: attr.synopsis || 'Stream full anime in 4K on CineWorld.',
+        posterUrl: poster,
+        backdropUrl: backdrop,
+        rating,
+        voteCount: attr.userCount ? `${Math.round(attr.userCount / 1000)}K` : '50K',
+        releaseYear,
+        duration: attr.episodeCount ? `${attr.episodeCount} Episodes` : 'Anime Series',
+        quality: '4K',
+        genres: ['Animation', 'Anime', 'Action'],
+        cast: ['Anime Studio Voice Cast'],
+        trailerYoutubeId: attr.youtubeVideoId || 'k1w3Qf0k_aU',
+        embedServers: getEmbedServers(item.id, 'animation'),
+        downloadOptions: getDownloadOptions(title, releaseYear),
+        trending: true,
+        topRated: rating >= 8.0,
+      };
+    });
+  } catch (e) {
+    console.error('Kitsu anime error', e);
+    return [];
+  }
+}
+
+// 4. Live TMDB Category Discover Feed (Trending, Top Rated, Now Playing)
+export async function fetchTMDBDiscover(endpoint: string, explicitType?: 'movie' | 'series' | 'animation'): Promise<MovieItem[]> {
+  try {
+    const res = await fetch(`${TMDB_BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${TMDB_API_KEY}&language=en-US&page=1`, {
+      next: { revalidate: 3600 }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.results || []).map((raw: any) => formatTMDBItem(raw, explicitType));
+  } catch {
+    return [];
+  }
+}
+
+// 5. Unified Multi-API Global Search (TMDB Multi + TV + Movie + TVMaze + Jikan + Kitsu)
+export async function searchGlobalAPIs(query: string): Promise<MovieItem[]> {
+  const cleanQ = query.trim();
+  if (!cleanQ) return [];
+
+  // Run all search engines in parallel for 100% catalog coverage
+  const [tmdbMulti, tmdbTV, tmdbMovie, tvmazeResults, jikanResults, kitsuResults] = await Promise.allSettled([
+    // TMDB Multi Search
     (async () => {
       try {
         const res = await fetch(
-          `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+          `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(cleanQ)}&page=1&include_adult=false`
         );
         if (!res.ok) return [];
         const data = await res.json();
@@ -283,26 +469,62 @@ export async function searchGlobalAPIs(query: string): Promise<MovieItem[]> {
         return [];
       }
     })(),
-    searchTVMaze(query),
-    searchJikanAnime(query),
+
+    // TMDB TV Series Direct Search
+    (async () => {
+      try {
+        const res = await fetch(
+          `${TMDB_BASE_URL}/search/tv?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(cleanQ)}&page=1&include_adult=false`
+        );
+        if (!res.ok) return [];
+        const data = await res.json();
+        return (data.results || []).map((item: any) => formatTMDBItem(item, 'series'));
+      } catch {
+        return [];
+      }
+    })(),
+
+    // TMDB Movies Direct Search
+    (async () => {
+      try {
+        const res = await fetch(
+          `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(cleanQ)}&page=1&include_adult=false`
+        );
+        if (!res.ok) return [];
+        const data = await res.json();
+        return (data.results || []).map((item: any) => formatTMDBItem(item, 'movie'));
+      } catch {
+        return [];
+      }
+    })(),
+
+    searchTVMaze(cleanQ),
+    searchJikanAnime(cleanQ),
+    searchKitsuAnime(cleanQ),
   ]);
 
   const combined: MovieItem[] = [];
-  const seenTitles = new Set<string>();
+  const seenKeys = new Set<string>();
 
   const addItems = (items: MovieItem[]) => {
     for (const item of items) {
-      const key = item.title.toLowerCase().trim();
-      if (!seenTitles.has(key)) {
-        seenTitles.add(key);
+      // Deduplicate by TMDB ID if present, otherwise title+type
+      const key = item.tmdbId ? `tmdb-${item.tmdbId}` : `${item.title.toLowerCase().trim()}-${item.type}`;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
         combined.push(item);
       }
     }
   };
 
-  if (tmdbResults.status === 'fulfilled') addItems(tmdbResults.value);
+  // Prioritize direct TMDB results (which contain exact TMDB ID)
+  if (tmdbTV.status === 'fulfilled') addItems(tmdbTV.value);
+  if (tmdbMovie.status === 'fulfilled') addItems(tmdbMovie.value);
+  if (tmdbMulti.status === 'fulfilled') addItems(tmdbMulti.value);
   if (tvmazeResults.status === 'fulfilled') addItems(tvmazeResults.value);
   if (jikanResults.status === 'fulfilled') addItems(jikanResults.value);
+  if (kitsuResults.status === 'fulfilled') addItems(kitsuResults.value);
 
   return combined;
 }
+

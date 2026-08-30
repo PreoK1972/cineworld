@@ -182,23 +182,23 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#06070a] flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-[#0c0e17] rounded-3xl border border-white/10 p-8 shadow-2xl space-y-6 text-center">
+      <div className="min-h-screen-dvh bg-[#06070a] flex items-center justify-center p-4 pt-[max(1rem,env(safe-area-inset-top,1rem))] pb-[max(1rem,env(safe-area-inset-bottom,1rem))]">
+        <div className="w-full max-w-md bg-[#0c0e17] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 text-center">
           
-          <div className="w-16 h-16 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center mx-auto shadow-lg shadow-red-600/20">
-            <Lock className="w-8 h-8" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center mx-auto shadow-lg shadow-red-600/20">
+            <Lock className="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-2xl font-black text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               CineWorld Admin Portal
             </h1>
-            <p className="text-xs text-neutral-400">
+            <p className="text-[11px] sm:text-xs text-neutral-400">
               Restricted management area for publisher metrics, ad networks & content catalog.
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4 pt-2">
+          <form onSubmit={handleLogin} className="space-y-4 pt-1">
             <div className="space-y-1 text-left">
               <label className="text-xs font-semibold text-neutral-300">
                 Enter Master Admin PIN:
@@ -207,11 +207,12 @@ export default function AdminPage() {
                 <Key className="w-4 h-4 text-neutral-500 absolute left-3 top-3.5" />
                 <input
                   type="password"
+                  inputMode="numeric"
                   placeholder={isLocked ? 'Access locked — try later' : 'Enter PIN'}
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
                   disabled={isLocked || isAuthLoading}
-                  className="w-full pl-9 pr-4 py-3 bg-neutral-900 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-red-500 font-mono tracking-widest text-center disabled:opacity-50"
+                  className="w-full pl-9 pr-4 py-3 bg-neutral-900 border border-white/10 rounded-xl text-base sm:text-sm text-white focus:outline-none focus:border-red-500 font-mono tracking-widest text-center disabled:opacity-50"
                   autoFocus
                 />
               </div>
@@ -230,7 +231,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={isLocked || isAuthLoading || !pinInput}
-              className="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-sm shadow-xl shadow-red-600/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-sm shadow-xl shadow-red-600/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 tap-target active:scale-95"
             >
               {isAuthLoading ? (
                 <>
@@ -247,7 +248,7 @@ export default function AdminPage() {
 
           <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs text-neutral-400">
             <span className="text-neutral-600">PIN secured server-side</span>
-            <Link href="/" className="hover:text-white flex items-center gap-1">
+            <Link href="/" className="hover:text-white flex items-center gap-1 tap-target">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Site</span>
             </Link>
@@ -258,31 +259,32 @@ export default function AdminPage() {
     );
   }
 
+
   return (
-    <div className="min-h-screen bg-[#08090d] text-neutral-100 flex flex-col">
+    <div className="min-h-screen-dvh bg-[#08090d] text-neutral-100 flex flex-col">
       
       {/* Admin Top Header Bar */}
-      <header className="bg-[#0b0d14] border-b border-white/10 sticky top-0 z-40 py-3.5 px-4 sm:px-8 flex items-center justify-between shadow-xl">
-        <div className="flex items-center gap-4">
+      <header className="bg-[#0b0d14] border-b border-white/10 sticky top-0 z-40 pt-[max(0.75rem,env(safe-area-inset-top,0.75rem))] pb-3 px-3 sm:px-8 flex items-center justify-between shadow-xl">
+        <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center font-bold text-white shadow-md shadow-red-600/30">
-              <ShieldCheck className="w-5 h-5" />
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-red-600 flex items-center justify-center font-bold text-white shadow-md shadow-red-600/30 shrink-0">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <span className="text-base font-black text-white flex items-center gap-1.5">
+              <span className="text-sm sm:text-base font-black text-white flex items-center gap-1.5">
                 CINE<span className="text-red-500">WORLD</span>
-                <span className="text-[10px] bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.2 rounded-full uppercase tracking-wider font-bold">
-                  ADMIN CONSOLE
+                <span className="text-[9px] sm:text-[10px] bg-red-600/20 text-red-400 border border-red-500/30 px-1.5 sm:px-2 py-0.2 rounded-full uppercase tracking-wider font-bold">
+                  ADMIN
                 </span>
               </span>
-              <p className="text-[10px] text-neutral-400 hidden sm:block">
+              <p className="text-[10px] text-neutral-400 hidden md:block">
                 Publisher CPM Engine • Paychangu Gateway • Content CMS
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs font-semibold">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>Live System Active</span>
@@ -290,16 +292,17 @@ export default function AdminPage() {
 
           <Link
             href="/"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 hover:text-white rounded-xl text-xs font-semibold border border-white/10 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 hover:text-white rounded-xl text-xs font-semibold border border-white/10 transition-all active:scale-95 tap-target"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>View Public Site</span>
+            <span>Site</span>
           </Link>
 
           <button
             onClick={() => setIsAuthenticated(false)}
-            className="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-neutral-800 rounded-lg"
+            className="p-2 text-neutral-400 hover:text-red-400 hover:bg-neutral-800 rounded-xl tap-target flex items-center justify-center"
             title="Lock Admin"
+            aria-label="Lock Admin"
           >
             <Lock className="w-4 h-4" />
           </button>
@@ -307,58 +310,59 @@ export default function AdminPage() {
       </header>
 
       {/* Main Admin Container */}
-      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
+      <main className="max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-5 sm:py-8 flex-1 space-y-6 sm:space-y-8 pb-[max(2rem,env(safe-area-inset-bottom,2rem))]">
         
         {/* Navigation Tabs */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-3">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-3 scroll-touch">
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 active:scale-95 ${
               activeTab === 'analytics'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
                 : 'bg-neutral-900/60 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
             <BarChart3 className="w-4 h-4" />
-            <span>Revenue & CPM Analytics</span>
+            <span>Revenue</span>
           </button>
 
           <button
             onClick={() => setActiveTab('content')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 active:scale-95 ${
               activeTab === 'content'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
                 : 'bg-neutral-900/60 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
             <Film className="w-4 h-4" />
-            <span>Content Manager ({movies.length} Movies)</span>
+            <span>Catalog ({movies.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('subscriptions')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 active:scale-95 ${
               activeTab === 'subscriptions'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
                 : 'bg-neutral-900/60 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
             <Smartphone className="w-4 h-4" />
-            <span>VIP Subscriptions ({transactions.length})</span>
+            <span>VIP ({transactions.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('ads')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all shrink-0 active:scale-95 ${
               activeTab === 'ads'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
                 : 'bg-neutral-900/60 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
             <Radio className="w-4 h-4" />
-            <span>Ad Networks Control</span>
+            <span>Ads</span>
           </button>
         </div>
+
 
         {/* TAB 1: REVENUE & CPM ANALYTICS */}
         {activeTab === 'analytics' && (
@@ -727,6 +731,7 @@ export default function AdminPage() {
                     <tr>
                       <th className="p-3.5">Method</th>
                       <th className="p-3.5">User Phone</th>
+                      <th className="p-3.5">Plan Requested</th>
                       <th className="p-3.5">Transaction ID</th>
                       <th className="p-3.5">Time</th>
                       <th className="p-3.5 text-right">Actions</th>
@@ -739,26 +744,35 @@ export default function AdminPage() {
                         if (pending.length === 0) {
                           return (
                             <tr>
-                              <td colSpan={5} className="p-5 text-center text-neutral-500">No pending payments.</td>
+                              <td colSpan={6} className="p-5 text-center text-neutral-500">No pending payments.</td>
                             </tr>
                           );
                         }
                         return pending.map((p: any) => (
                           <tr key={p.id} className="hover:bg-neutral-800/40 transition-colors">
                             <td className="p-3.5 capitalize font-bold text-white">{p.method}</td>
-                            <td className="p-3.5 text-blue-400">{p.phone}</td>
-                            <td className="p-3.5 font-mono text-amber-400">{p.txId}</td>
+                            <td className="p-3.5 text-blue-400 font-mono">{p.phone}</td>
+                            <td className="p-3.5">
+                              <span className="font-bold text-amber-400">
+                                {p.planName || (p.days === 1 ? '1-Day Pass' : p.days === 30 ? '30-Day VIP' : '7-Day Pass')}
+                              </span>
+                              <span className="text-[10px] text-neutral-400 block">
+                                MKW {(p.amountMkw || (p.days === 1 ? 500 : p.days === 30 ? 7000 : 2000)).toLocaleString()}
+                              </span>
+                            </td>
+                            <td className="p-3.5 font-mono text-white font-bold">{p.txId}</td>
                             <td className="p-3.5 text-neutral-500">{new Date(p.date).toLocaleTimeString()}</td>
                             <td className="p-3.5 flex justify-end gap-2">
                               <button
                                 onClick={() => {
-                                  upgradeToVip(7, p.phone, p.method);
+                                  const days = p.days || 7;
+                                  const amount = p.amountMkw || (days === 1 ? 500 : days === 30 ? 7000 : 2000);
+                                  upgradeToVip(days, p.phone, p.method, amount);
                                   const updated = pending.filter((item: any) => item.id !== p.id);
                                   localStorage.setItem('cineworld_pending_payments', JSON.stringify(updated));
-                                  showToast(`Approved VIP for ${p.phone}`);
-                                  // Force re-render hack by updating state somewhere (transactions will trigger it)
+                                  showToast(`Approved ${days}-Day VIP for ${p.phone}`);
                                 }}
-                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors"
+                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors shadow-sm"
                               >
                                 Approve VIP
                               </button>
@@ -796,7 +810,14 @@ export default function AdminPage() {
                 Instantly grant or renew VIP ad-free streaming for a customer phone number or email address.
               </p>
 
-              <form onSubmit={handleManualGrantVip} className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const amount = manualDays === 1 ? 500 : manualDays === 30 ? 7000 : 2000;
+                  upgradeToVip(manualDays, manualUser, manualChannel, amount);
+                }} 
+                className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs"
+              >
                 <input
                   type="text"
                   placeholder="Phone or Email (e.g. 0999 123 456)"
@@ -804,6 +825,16 @@ export default function AdminPage() {
                   onChange={(e) => setManualUser(e.target.value)}
                   className="p-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white sm:col-span-2"
                 />
+
+                <select
+                  value={manualDays}
+                  onChange={(e: any) => setManualDays(Number(e.target.value))}
+                  className="p-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white"
+                >
+                  <option value={1}>1-Day (MKW 500)</option>
+                  <option value={7}>7-Days (MKW 2,000)</option>
+                  <option value={30}>30-Days (MKW 7,000)</option>
+                </select>
 
                 <select
                   value={manualChannel}
@@ -819,7 +850,7 @@ export default function AdminPage() {
                   type="submit"
                   className="py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl shadow-lg shadow-amber-500/20"
                 >
-                  Grant 7-Day VIP ⚡
+                  Grant VIP ⚡
                 </button>
               </form>
             </div>

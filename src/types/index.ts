@@ -52,13 +52,14 @@ export interface MovieItem {
   }[];
   seasons?: Season[];
   downloadOptions: DownloadOption[];
+  tmdbId?: string;
   featured?: boolean;
   trending?: boolean;
   topRated?: boolean;
   spotlightAfrica?: boolean;
 }
 
-export type SubscriptionPlan = 'free' | 'vip_mkw2000';
+export type SubscriptionPlan = 'free' | 'vip_daily' | 'vip_weekly' | 'vip_monthly' | 'vip_mkw2000';
 
 export interface UserSubscription {
   plan: SubscriptionPlan;

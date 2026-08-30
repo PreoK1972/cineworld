@@ -30,23 +30,23 @@ export default function MovieRow({ title, subtitle, icon, movies, badge }: Movie
   if (!movies || movies.length === 0) return null;
 
   return (
-    <section className="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-4 sm:py-8 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
       {/* Row Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {icon}
-            <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight">
+            <h2 className="text-base sm:text-2xl font-bold text-white tracking-tight">
               {title}
             </h2>
             {badge && (
-              <span className="px-2 py-0.5 bg-red-600/20 border border-red-500/30 text-red-400 text-xs font-semibold rounded-full">
+              <span className="px-2 py-0.5 bg-red-600/20 border border-red-500/30 text-red-400 text-[10px] sm:text-xs font-semibold rounded-full">
                 {badge}
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="text-xs sm:text-sm text-neutral-400 mt-0.5">
+            <p className="text-[11px] sm:text-sm text-neutral-400 mt-0.5">
               {subtitle}
             </p>
           )}
@@ -74,12 +74,12 @@ export default function MovieRow({ title, subtitle, icon, movies, badge }: Movie
       {/* Movie Carousel / Row */}
       <div
         ref={rowRef}
-        className="flex gap-4 overflow-x-auto no-scrollbar pb-4 pt-1 snap-x snap-mandatory"
+        className="flex gap-2.5 sm:gap-4 overflow-x-auto no-scrollbar pb-3 pt-1 snap-x snap-mandatory scroll-touch"
       >
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="w-[160px] sm:w-[200px] md:w-[220px] shrink-0 snap-start"
+            className="w-[125px] min-[400px]:w-[140px] sm:w-[180px] md:w-[210px] shrink-0 snap-start"
           >
             <MovieCard movie={movie} />
           </div>
@@ -88,3 +88,4 @@ export default function MovieRow({ title, subtitle, icon, movies, badge }: Movie
     </section>
   );
 }
+
